@@ -10,7 +10,7 @@ class Api::V1::BooksController < ApplicationController
   
     # GET /books/1
     def show
-      render json: @book, include: [:author]
+      render json: @book, include: [:category, :author, :publisher]
     end
   
     # POST /books

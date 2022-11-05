@@ -26,7 +26,7 @@ const BookService = {
   update: async(id, book) => {
     if (!id && !book) return
 
-    let response = await axiosInstance.put(`/articles/${id}`, { book: book })
+    let response = await axiosInstance.put(`/books/${id}`, { book: book })
     return response.data
   }
 

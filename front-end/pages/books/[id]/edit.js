@@ -8,6 +8,7 @@ import BookService from "../../../src/services/BookService";
 import CategoryService from "../../../src/services/CategoryService";
 import AuthorService from "../../../src/services/AuthorService";
 import PublisherService from "../../../src/services/PublisherService";
+import useSWR from 'swr'
 
 function EditBook() {
   const router = useRouter();
@@ -17,11 +18,11 @@ function EditBook() {
   const [publishers, setPublishers] = useState([]);
   const [authors, setAuthor] = useState([]);
 
+  const { data } = useSWR({url: `books/edit${id}`, id: id}, BookService.getById)
+
   useEffect(() => {
-    BookService.getById(id).then((data) => {
       setBook(data)
-    })
-  }, [id])
+  }, [data])
 
   const {
     register,
@@ -31,7 +32,7 @@ function EditBook() {
 
   const updateBook = (book) => {
     BookService.update(id, book).then((data) => {
-      router.push(ROUTES.book.list)
+      router.push(ROUTES.books.list)
       toast.success(`Book successfully updated!`)
     }).catch((e) => {
       toast.error(`Erro when updating Book: ${e.message}`)
@@ -44,9 +45,9 @@ function EditBook() {
     AuthorService.getAll().then((data) => setAuthor(data));
   }, []);
 
-  if (!book || !categories.length || !author.length || !publishers.length) return `Carregando...`
-
-  console.log(book)
+  
+  console.log('2',book)
+  if (!book || !categories.length || !authors.length || !publishers.length) return `Carregando...`
 
   return (
     <>
@@ -54,7 +55,7 @@ function EditBook() {
       <p>
         <Link
           href={{
-            pathname: ROUTES.book.list,
+            pathname: ROUTES.books.list,
           }}
         >Cancelar
         </Link>
@@ -76,13 +77,13 @@ function EditBook() {
         <div className="field">
           <label>Num Pages</label>
           <input {...register("Num Pages", { required: true })} defaultValue={book.num_pages} />
-          {errors.num_pages && <p>Language is required.</p>}
+          {errors.num_pages && <p>Num Pages is required.</p>}
         </div>
 
         <div className="field">
           <label>Publisher At</label>
-          <input {...register("Num Pages", { required: true })} defaultValue={book.num_pages} />
-          {errors.published_at && <p>Language is required.</p>}
+          <input {...register("Num Pages", { required: true })} defaultValue={book.published_at} />
+          {errors.published_at && <p>Publisher At is required.</p>}
         </div>
 
         <div className="field">

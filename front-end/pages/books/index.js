@@ -4,19 +4,19 @@ import { useRouter } from "next/router";
 import { Button, Grid, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import AddIcon from '@mui/icons-material/Add';
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ROUTES from "../../src/config/routes";
 import BookService from "../../src/services/BookService";
 import { Container } from "@mui/system";
 import useSWR from 'swr'
-import axiosInstance from '../../src/utils/axios'
 
 function BookList() {
   const [books, setBook] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  const { data, error } = useSWR(axiosInstance + 'books')
+  const { data, error } = useSWR('/books', BookService.getAll)
 
   const deleteBook = (book) => {
     var accepted = confirm(`Você realmente gostaria de deletar o livro: ${book.title}`);
@@ -42,7 +42,8 @@ function BookList() {
 
   useEffect(() => {
 
-    console.log(data)
+    console.log("DATA ", data)
+    console.log("ERROR ",error)
 
     if (data === undefined) return
 
@@ -65,7 +66,7 @@ function BookList() {
                 pathname: ROUTES.books.new,
               }}
             >
-              <Button variant="contained" color="success" size="small" startIcon={<DeleteForeverIcon fontSize="small" />}>
+              <Button variant="contained" color="success" size="small" startIcon={<AddIcon fontSize="small" />}>
                 New Book
               </Button>
             </Link>

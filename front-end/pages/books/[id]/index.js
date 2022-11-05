@@ -5,13 +5,11 @@ import ROUTES from "../../../src/config/routes";
 import useSWR from 'swr'
 import BookService from "../../../src/services/BookService";
 
-
 function ShowBook() {
   const router = useRouter()
   const { id } = router.query
 
-  // const { data, error } = useSWR(user.isAuthenticated ? {url: `books/${id}`, id: id} : null, BookService.getById)
-  const { data, error } = useSWR({url: `books/${id}`, id: id})
+  const { data, error } = useSWR({url: `books/show${id}`, id: id}, BookService.getById)
 
   const [book, setBook] = useState(null);
 
@@ -28,7 +26,7 @@ function ShowBook() {
       <p>
         <Link
           href={{
-            pathname: ROUTES.book.list,
+            pathname: ROUTES.books.list,
           }}
         >Voltar</Link>
       </p>
@@ -58,7 +56,6 @@ function ShowBook() {
         <dt>Publisher</dt>
         <dd>{book.publisher.name}</dd>
       </dl>
-
     </>
   );
 }
